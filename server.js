@@ -9,7 +9,7 @@ app.use(express.static('public'));
 
 const notesData = require('./db/db.json');
 
-// GET Route for homepage
+// GET Route for notes page
 app.get('/notes', (req, res) =>
     res.sendFile(path.join(__dirname, '/public/notes.html'))
   );
