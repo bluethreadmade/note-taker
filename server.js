@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const PORT = process.env.port || 5501;
 
@@ -31,24 +32,27 @@ app.get('*', (req, res) =>
 
 // POST Route for new note
 app.post('/api/notes', (req, res) => {
-    // console.info(`${req.body} request to add a note received`);
-    //req.body append/write to notesData
-    //if successful send back 200 
-    // req.status(200).json("bonked")
-    //else
-    //res.status(500).json("error writing to db")
-
     // Destructuring assignment for the items in req.body
     const { title, text } = req.body;
 
     // If all the required properties are present
     if (title && text) {
-        // Variable for the object we will save
+
+        // read existing date from db.json
+        const notes = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
+
+        // Variable for the object to save
         const newNote = {
-        title,
-        text,
-        noteID: noteID
+            title,
+            text,
+            noteID
         };
+
+        // add newNote to the notes array
+        notes.push(newNote);
+
+        // write update notes array back to db.json
+        fs.writeFileSync('./db/db.json', JSON.stringify(notes, null, 2));
 
         const response = {
         status: 'success',
