@@ -9,12 +9,13 @@ const app = express();
 app.use(express.static('public'));
 //parse incoming request bodies
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 const notesData = require('./db/db.json');
 
 // add npm package
 const { v4: uuidv4 } = require('uuid');
-let noteID = uuidv4();
 
 // GET Route for notes page
 app.get('/notes', (req, res) =>
@@ -44,6 +45,8 @@ app.post('/api/notes', (req, res) => {
 
     // If all the required properties are present
     if (title && text) {
+        // create unique id for new note
+        let id = uuidv4();
 
         // read existing date from db.json
         const notes = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
@@ -52,7 +55,7 @@ app.post('/api/notes', (req, res) => {
         const newNote = {
             title,
             text,
-            noteID
+            id
         };
 
         // add newNote to the notes array
@@ -67,9 +70,10 @@ app.post('/api/notes', (req, res) => {
         };
 
         console.log(response);
+        res.json(response);
     }
     else {
-    res.status(500).json('Error in posting review');
+    res.status(500).json('Error in posting notes');
   }
 });
 
