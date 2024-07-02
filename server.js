@@ -24,10 +24,17 @@ app.get('/notes', (req, res) =>
 // GET Route for all notes data  
 app.get('/api/notes', (req, res) => res.json(notesData));
 
-// GET Route for homepage
+// GET Route for wildcard
 app.get('*', (req, res) =>
     res.sendFile(path.join(__dirname, '/public/index.html'))
   );
+
+// GET Route for homepage
+app.get('/', (req, res) =>
+    res.sendFile(path.join(__dirname, '/public/index.html'))
+
+);  
+
 
 
 // POST Route for new note
