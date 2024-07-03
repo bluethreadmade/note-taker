@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-const notesData = require('./db/db.json');
+let notesData = require('./db/db.json');
 
 // add npm package
 const { v4: uuidv4 } = require('uuid');
@@ -49,7 +49,7 @@ app.post('/api/notes', (req, res) => {
         let id = uuidv4();
 
         // read existing date from db.json
-        const notes = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
+        notesData = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
 
         // Variable for the object to save
         const newNote = {
@@ -59,18 +59,12 @@ app.post('/api/notes', (req, res) => {
         };
 
         // add newNote to the notes array
-        notes.push(newNote);
+        notesData.push(newNote);
 
         // write updated notes array back to db.json
-        fs.writeFileSync('./db/db.json', JSON.stringify(notes, null, 2));
+        fs.writeFileSync('./db/db.json', JSON.stringify(notesData, null, 2));
 
-        const response = {
-        status: 'success',
-        body: newNote,
-        };
-
-        console.log(response);
-        res.json(response);
+        res.json(newNote);
 
     }
     else {
