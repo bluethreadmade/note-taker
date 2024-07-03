@@ -61,7 +61,7 @@ app.post('/api/notes', (req, res) => {
         // add newNote to the notes array
         notes.push(newNote);
 
-        // write update notes array back to db.json
+        // write updated notes array back to db.json
         fs.writeFileSync('./db/db.json', JSON.stringify(notes, null, 2));
 
         const response = {
@@ -71,10 +71,32 @@ app.post('/api/notes', (req, res) => {
 
         console.log(response);
         res.json(response);
+
     }
     else {
     res.status(500).json('Error in posting notes');
   }
+});
+
+app.delete('/api/notes/:id', (req, res) => {
+    // res.json(`this will delete a movie from the db ${req.params.id}`);
+    // read existing date from db.json
+    const notes = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
+
+    // filter the notes array to removed the object whose id matches the request parameter id
+    const updatedNotes = notes.filter(({ id }) => id !== req.params.id);
+
+    // write updated notes array back to db.json
+    fs.writeFileSync('./db/db.json', JSON.stringify(updatedNotes, null, 2));
+
+    const response = {
+        status: 'deleted',
+        body: updatedNotes,
+        };
+
+        console.log(response);
+        res.json(response);
+
 });
 
 app.listen(PORT, () =>
