@@ -11,9 +11,6 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-let notesData = require('./db/db.json');
-
 // add npm package
 const { v4: uuidv4 } = require('uuid');
 
@@ -23,7 +20,12 @@ app.get('/notes', (req, res) =>
   );
 
 // GET Route for all notes data  
-app.get('/api/notes', (req, res) => res.json(notesData));
+app.get('/api/notes', (req, res) => {
+    // read existing date from db.json
+    notesData = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
+
+    res.json(notesData);
+});
 
 // GET Route for wildcard
 app.get('*', (req, res) =>
@@ -73,19 +75,18 @@ app.post('/api/notes', (req, res) => {
 });
 
 app.delete('/api/notes/:id', (req, res) => {
-    // res.json(`this will delete a movie from the db ${req.params.id}`);
     // read existing date from db.json
-    const notes = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
+    notesData = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
 
     // filter the notes array to removed the object whose id matches the request parameter id
-    const updatedNotes = notes.filter(({ id }) => id !== req.params.id);
+    let newNotesData = notesData.filter(({ id }) => id !== req.params.id);
 
     // write updated notes array back to db.json
-    fs.writeFileSync('./db/db.json', JSON.stringify(updatedNotes, null, 2));
+    fs.writeFileSync('./db/db.json', JSON.stringify(newNotesData, null, 2));
 
     const response = {
         status: 'deleted',
-        body: updatedNotes,
+        body: newNotesData,
         };
 
         console.log(response);
