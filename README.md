@@ -1,9 +1,9 @@
-# Note Taking Appliction
+# Note Taking Application
 
 ## Description
-This is a simple note taking application designed to take a user input note and render it into a notes list. The list allows deleteing a note.
+This is a simple note taking application designed to take a user input note and render it into a notes list. The list allows deleting a note.
 
-The purpose of this project was to practice connecting the front and back ends of an applicaiton. I learned how to write routes in express js and how to test them in Insomnia. I also deployed the app on render.
+The purpose of this project was to practice connecting the front and back ends of an application. I learned how to write routes in express js and how to test them in Insomnia. I also deployed the app on render.
 
 ## Deployed Application Link
 https://note-taker-6yiz.onrender.com/
